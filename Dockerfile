@@ -1,50 +1,35 @@
-# Stage 1: Build stage
-FROM python:3.11-slim as builder
-
-# Install build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create and activate virtual environment
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Stage 2: Runtime stage
 FROM python:3.11-slim
 
-# Install runtime dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     libglib2.0-0 \
     espeak \
+    espeak-data \
+    libespeak1 \
+    libespeak-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy virtual environment from builder
-COPY --from=builder /opt/venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Set working directory
 WORKDIR /app
 
-# Copy only necessary files
-COPY backend/ ./backend/
-COPY models/ ./models/
-COPY data/ ./data/
+# Copy and install Python dependencies
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Create directory for audio files
+# Copy only backend (which contains everything needed)
+COPY backend/ .
+
+# Create necessary directories
 RUN mkdir -p static/audio
 
-# Set environment variables
 ENV PYTHONPATH=/app
 ENV PORT=8000
 
-# Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["gunicorn", "backend.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"] 
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run without backend. prefix since we copied backend contents to /app
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
