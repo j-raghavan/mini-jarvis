@@ -2,6 +2,8 @@
 
 A PyTorch-powered weather assistant with voice capabilities, built with FastAPI and vanilla JavaScript.
 
+![Mini-Jarvis User Interface](mini-jarvis.png)
+
 ## Project Structure
 
 ```
