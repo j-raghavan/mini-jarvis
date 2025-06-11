@@ -21,17 +21,18 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && find /usr/local -name "*.pyc" -delete
 
 # Copy only the absolute essentials
-COPY backend/main.py .
-COPY backend/models/weather_classifier.py ./models/
-COPY backend/data/preprocessor.json ./data/
-COPY backend/data/intent_mapping.json ./data/
+# COPY backend/main.py .
+# COPY backend/models/weather_classifier.py ./models/
+# COPY backend/data/preprocessor.json ./data/
+# COPY backend/data/intent_mapping.json ./data/
 
-# Copy only your best model (rename for consistency)
-COPY backend/models/best_model_epoch_17.pth ./models/best_model.pth
+# # Copy only your best model (rename for consistency)
+# COPY backend/models/best_model_epoch_17.pth ./models/best_model.pth
 
-# Copy services if they exist
-COPY backend/services/ ./services/ 2>/dev/null || echo "No services directory found"
+# # Copy services if they exist
+# COPY backend/services/ ./services/ 2>/dev/null || echo "No services directory found"
 
+COPY backend/. .
 # Create audio directory
 RUN mkdir -p static/audio
 
