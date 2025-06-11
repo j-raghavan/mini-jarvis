@@ -1,0 +1,8 @@
+{
+  "current_weather": 0,
+  "weather_forecast": 1,
+  "temperature_query": 2,
+  "precipitation_query": 3,
+  "weather_comparison": 4,
+  "general_greeting": 5
+}
