@@ -18,6 +18,79 @@ mini-jarvis/
 └── Dockerfile        # Backend deployment
 ```
 
+## System Architecture
+
+### Call Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant WeatherAPI
+    participant TTS
+
+    User->>Frontend: Enter message
+    Frontend->>Backend: POST /chat
+    Backend->>Backend: Process message
+    Backend->>Backend: Classify intent
+    Backend->>Backend: Extract entities
+    
+    alt Weather Query
+        Backend->>WeatherAPI: Get weather data
+        WeatherAPI-->>Backend: Return weather info
+    end
+    
+    Backend->>Backend: Generate response
+    Backend->>TTS: Convert to speech
+    TTS-->>Backend: Audio file
+    Backend-->>Frontend: Response + Audio URL
+    Frontend-->>User: Display text + Play audio
+```
+
+### Component Architecture
+
+```mermaid
+graph TB
+    subgraph Frontend
+        UI[Web Interface]
+        JS[app.js]
+        CSS[style.css]
+    end
+
+    subgraph Backend
+        API[FastAPI Server]
+        Model[PyTorch Model]
+        TTS[pyttsx3]
+        Weather[Weather Client]
+    end
+
+    subgraph External Services
+        OpenMeteo[Open-Meteo API]
+    end
+
+    subgraph Dependencies
+        FastAPI[FastAPI]
+        PyTorch[PyTorch]
+        Uvicorn[Uvicorn]
+        Pydantic[Pydantic]
+        HTTPX[HTTPX]
+    end
+
+    UI --> JS
+    JS --> API
+    API --> Model
+    API --> TTS
+    API --> Weather
+    Weather --> OpenMeteo
+    
+    Model --> PyTorch
+    API --> FastAPI
+    API --> Uvicorn
+    API --> Pydantic
+    Weather --> HTTPX
+```
+
 ## Local Development
 
 ### Backend
