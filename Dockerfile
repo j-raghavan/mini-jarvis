@@ -33,7 +33,6 @@ WORKDIR /app
 
 # Copy only necessary files
 COPY backend/ ./backend/
-COPY static/ ./static/
 COPY models/ ./models/
 COPY data/ ./data/
 
