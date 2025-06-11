@@ -1,0 +1,78 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache
+.coverage
+.venv
+venv/
+env/
+
+# Model checkpoints (keep only best)
+**/checkpoint_epoch_*.pth
+**/best_model_epoch_1.pth
+**/best_model_epoch_2.pth
+**/best_model_epoch_3.pth
+**/best_model_epoch_4.pth
+**/best_model_epoch_5.pth
+**/best_model_epoch_7.pth
+**/best_model_epoch_8.pth
+**/best_model_epoch_10.pth
+**/best_model_epoch_11.pth
+**/best_model_epoch_14.pth
+**/best_model_epoch_15.pth
+**/best_model_epoch_16.pth
+**/best_model_epoch_19.pth
+
+# Keep only the best performing model
+# backend/models/best_model_epoch_17.pth
+
+# Data files (keep only essential)
+**/train.csv
+**/test.csv
+**/weather_dataset.csv
+
+# Audio files
+**/static/audio/*.mp3
+
+# Development
+.DS_Store
+.env
+.env.local
+.env.*.local
+*.log
+*.tmp
+
+# Documentation
+README.md
+LICENSE
+specs/
+tests/
+
+# Frontend
+frontend/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+Thumbs.db
+
+# Training scripts (not needed in production)
+**/train.py
+**/training/
